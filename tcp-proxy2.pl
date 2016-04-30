@@ -1,3 +1,13 @@
+#!/usr/bin/perl		
+#		
+# Peteris Krumins (peter@catonmat.net)		
+# http://www.catonmat.net  --  good coders code, great reuse		
+# Minor Improve by Tche333		
+#		
+# Written for the article "A TCP Proxy in Perl":		
+#		
+# http://catonmat.net/blog/perl-tcp-proxy		
+#		
 use warnings;
 use strict;
 
@@ -5,7 +15,7 @@ use IO::Socket::INET;
 use IO::Select;
 
 #my @allowed_ips = ('all', '10.10.10.5');
-my @allowed_ips = ('10.111.70.122');
+my @allowed_ips = ('10.10.10.5');
 my $ioset = IO::Select->new;
 my %socket_map;
 
