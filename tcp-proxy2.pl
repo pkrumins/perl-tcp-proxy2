@@ -1,21 +1,11 @@
-#!/usr/bin/perl
-#
-# Peteris Krumins (peter@catonmat.net)
-# http://www.catonmat.net  --  good coders code, great reuse
-#
-#
-# Written for the article "A TCP Proxy in Perl":
-#
-# http://catonmat.net/blog/perl-tcp-proxy
-#
-
 use warnings;
 use strict;
 
 use IO::Socket::INET;
 use IO::Select;
 
-my @allowed_ips = ('all', '10.10.10.5');
+#my @allowed_ips = ('all', '10.10.10.5');
+my @allowed_ips = ('10.111.70.122');
 my $ioset = IO::Select->new;
 my %socket_map;
 
@@ -24,6 +14,7 @@ my $debug = 1;
 sub new_conn {
     my ($host, $port) = @_;
     return IO::Socket::INET->new(
+        Type     => SOCK_STREAM,
         PeerAddr => $host,
         PeerPort => $port
     ) || die "Unable to connect to $host:$port: $!";
@@ -33,6 +24,8 @@ sub new_server {
     my ($host, $port) = @_;
     my $server = IO::Socket::INET->new(
         LocalAddr => $host,
+#        Proto     => "tcp",
+        Type      => SOCK_STREAM,
         LocalPort => $port,
         ReuseAddr => 1,
         Listen    => 100
@@ -55,6 +48,8 @@ sub new_connection {
     print "Connection from $client_ip accepted.\n" if $debug;
 
     my $remote = new_conn($remote_host, $remote_port);
+	print "Connecting to $remote_host:$remote_port.\n" if $debug;
+	
     $ioset->add($client);
     $ioset->add($remote);
 
@@ -119,4 +114,3 @@ while (1) {
         }
     }
 }
-
